@@ -47,7 +47,8 @@ function App() {
       const pdfDoc = await PDFDocument.load(pdfFile)
       
       // 3. Embed signature image
-      const sigImageBytes = await fetch(sigDataUrl).then(res => res.arrayBuffer())
+      const base64Data = sigDataUrl.split(',')[1]
+      const sigImageBytes = Uint8Array.from(atob(base64Data), c => c.charCodeAt(0))
       const embeddedImage = await pdfDoc.embedPng(sigImageBytes)
       const { width, height } = embeddedImage.scale(0.5) // scale it down a bit
 
